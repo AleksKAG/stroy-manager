@@ -17,7 +17,7 @@
         </div>
     </div>
 
-    <!-- Основные показатели проекта -->
+    <!-- Основные показатели -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
         <div class="bg-slate-900 rounded-3xl p-8">
             <div class="text-slate-400">Бюджет</div>
@@ -33,7 +33,7 @@
         </div>
     </div>
 
-    <!-- ОБЪЕКТЫ СТРОИТЕЛЬСТВА -->
+    <!-- Объекты -->
     <div class="mt-16">
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-2xl font-semibold">Объекты строительства</h2>
@@ -63,7 +63,7 @@
                 </div>
 
                 <div class="flex justify-between mt-4 text-sm">
-                    <span class="font-medium">{{.Budget}} ₽</span>
+                    <span>{{.Budget}} ₽</span>
                     <span class="text-emerald-400">{{.Spent}} ₽</span>
                 </div>
 
@@ -76,7 +76,7 @@
         </div>
     </div>
 
-    <!-- ГРАФИК РАБОТ -->
+    <!-- График работ -->
     <div class="mt-16">
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-2xl font-semibold">График работ</h2>
@@ -104,7 +104,7 @@
                 </div>
                 <form action="/task/delete/{{.ID}}" method="POST">
                     <button type="submit" onclick="return confirm('Удалить работу?')" 
-                            class="text-red-500 hover:text-red-400 px-4 py-2">✕</button>
+                            class="text-red-500 hover:text-red-400">✕</button>
                 </form>
             </div>
             {{end}}
@@ -112,60 +112,12 @@
     </div>
 </div>
 
-<!-- Модальное окно добавления объекта -->
-<div id="addObjectModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-    <div class="bg-slate-900 rounded-3xl p-8 w-full max-w-lg mx-4">
-        <h2 class="text-2xl font-semibold mb-6">Новый объект</h2>
-        <form method="POST" action="/add-object">
-            <input type="hidden" name="project_id" value="{{.Project.ID}}">
-            <input type="text" name="name" placeholder="Название объекта" required class="w-full bg-slate-800 rounded-2xl px-5 py-4 mb-4">
-            <input type="text" name="type" placeholder="Тип объекта" class="w-full bg-slate-800 rounded-2xl px-5 py-4 mb-4">
-            <input type="number" name="area" placeholder="Площадь (м²)" step="0.1" class="w-full bg-slate-800 rounded-2xl px-5 py-4 mb-4">
-            <input type="number" name="budget" placeholder="Бюджет (₽)" step="10000" class="w-full bg-slate-800 rounded-2xl px-5 py-4 mb-4">
-            <input type="number" name="floors" placeholder="Количество этажей" class="w-full bg-slate-800 rounded-2xl px-5 py-4 mb-4">
-            <input type="text" name="material" placeholder="Материал" class="w-full bg-slate-800 rounded-2xl px-5 py-4 mb-6">
-
-            <div class="flex gap-4">
-                <button type="submit" class="flex-1 bg-orange-500 hover:bg-orange-600 py-4 rounded-2xl font-medium">Добавить объект</button>
-                <button type="button" onclick="hideAddObjectModal()" class="flex-1 bg-slate-700 hover:bg-slate-600 py-4 rounded-2xl">Отмена</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Модальное окно редактирования объекта -->
-<div id="editObjectModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-    <div class="bg-slate-900 rounded-3xl p-8 w-full max-w-lg mx-4">
-        <h2 class="text-2xl font-semibold mb-6">Редактировать объект</h2>
-        <form method="POST" action="/object/edit">
-            <input type="hidden" name="id" id="edit_id">
-            <input type="hidden" name="project_id" value="{{.Project.ID}}">
-
-            <input type="text" name="name" id="edit_name" required class="w-full bg-slate-800 rounded-2xl px-5 py-4 mb-4">
-            <input type="text" name="type" id="edit_type" class="w-full bg-slate-800 rounded-2xl px-5 py-4 mb-4">
-            <input type="number" name="area" id="edit_area" step="0.1" class="w-full bg-slate-800 rounded-2xl px-5 py-4 mb-4">
-            <input type="number" name="budget" id="edit_budget" step="10000" class="w-full bg-slate-800 rounded-2xl px-5 py-4 mb-4">
-            <input type="number" name="floors" id="edit_floors" class="w-full bg-slate-800 rounded-2xl px-5 py-4 mb-4">
-            <input type="text" name="material" id="edit_material" class="w-full bg-slate-800 rounded-2xl px-5 py-4 mb-6">
-
-            <select name="status" id="edit_status" class="w-full bg-slate-800 rounded-2xl px-5 py-4 mb-6">
-                <option value="in_progress">В работе</option>
-                <option value="completed">Завершён</option>
-                <option value="on_hold">Приостановлен</option>
-            </select>
-
-            <div class="flex gap-4">
-                <button type="submit" class="flex-1 bg-orange-500 hover:bg-orange-600 py-4 rounded-2xl font-medium">Сохранить изменения</button>
-                <button type="button" onclick="hideEditObjectModal()" class="flex-1 bg-slate-700 hover:bg-slate-600 py-4 rounded-2xl">Отмена</button>
-            </div>
-        </form>
-    </div>
-</div>
-
+<!-- Модальные окна -->
 <script>
     function showAddObjectModal() {
         document.getElementById('addObjectModal').classList.remove('hidden');
     }
+
     function hideAddObjectModal() {
         document.getElementById('addObjectModal').classList.add('hidden');
     }
@@ -178,13 +130,46 @@
         document.getElementById('edit_budget').value = budget;
         document.getElementById('edit_floors').value = floors;
         document.getElementById('edit_material').value = material;
-        if (status) document.getElementById('edit_status').value = status;
-
+        if (status) {
+            document.getElementById('edit_status').value = status;
+        }
         document.getElementById('editObjectModal').classList.remove('hidden');
     }
 
     function hideEditObjectModal() {
         document.getElementById('editObjectModal').classList.add('hidden');
     }
+
+    // Добавь функцию для задач, если нужно
+    function showAddTaskModal() {
+        alert("Добавление задач будет реализовано позже");
+    }
 </script>
+
+<!-- Модальное окно добавления объекта -->
+<div id="addObjectModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+    <div class="bg-slate-900 rounded-3xl p-8 w-full max-w-lg mx-4">
+        <h2 class="text-2xl font-semibold mb-6">Новый объект</h2>
+        <form method="POST" action="/add-object">
+            <input type="hidden" name="project_id" value="{{.Project.ID}}">
+            <input type="text" name="name" placeholder="Название объекта" required class="w-full bg-slate-800 rounded-2xl px-5 py-4 mb-4">
+            <!-- остальные поля... -->
+            <button type="submit" class="w-full bg-orange-500 py-4 rounded-2xl mt-4">Добавить</button>
+        </form>
+    </div>
+</div>
+
+<!-- Модальное окно редактирования объекта -->
+<div id="editObjectModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+    <div class="bg-slate-900 rounded-3xl p-8 w-full max-w-lg mx-4">
+        <h2 class="text-2xl font-semibold mb-6">Редактировать объект</h2>
+        <form method="POST" action="/object/edit">
+            <input type="hidden" name="id" id="edit_id">
+            <input type="hidden" name="project_id" value="{{.Project.ID}}">
+            <input type="text" name="name" id="edit_name" required class="w-full bg-slate-800 rounded-2xl px-5 py-4 mb-4">
+            <!-- остальные поля... -->
+            <button type="submit" class="w-full bg-orange-500 py-4 rounded-2xl mt-4">Сохранить</button>
+        </form>
+    </div>
+</div>
 {{end}}

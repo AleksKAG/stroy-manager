@@ -1,8 +1,11 @@
 {
-  "gopls": {
-    "analyses": {
-      "unusedfunc": false,
-      "SA4003": false
-    }
+  "files.associations": {
+    "*.html": "html"
+  },
+  "html.validate.scripts": false,
+  "javascript.validate.enable": false,
+  "css.validate": false,
+  "tailwindCSS.includeLanguages": {
+    "plaintext": "html"
   }
 }
