@@ -13,14 +13,17 @@ type Project struct {
 }
 
 type Object struct {
-	ID        int
-	ProjectID int
-	Name      string
-	Type      string
-	Area      float64
-	Budget    float64
-	Spent     float64
-	Progress  int
+	ID          int
+	ProjectID   int
+	Name        string
+	Type        string
+	Area        float64
+	Budget      float64
+	Spent       float64
+	Progress    int
+	Floors      int     // новая характеристика
+	Material    string  // новая характеристика
+	Status      string
 }
 
 type Task struct {
