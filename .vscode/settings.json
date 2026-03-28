@@ -1,0 +1,8 @@
+{
+  "gopls": {
+    "analyses": {
+      "unusedfunc": false,
+      "SA4003": false
+    }
+  }
+}
