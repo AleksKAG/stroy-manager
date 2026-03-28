@@ -1,0 +1,32 @@
+{{define "content"}}
+<div class="max-w-7xl mx-auto p-8">
+    <div class="flex justify-between items-center mb-12">
+        <div>
+            <h1 class="text-5xl font-bold title">СтроМенеджер</h1>
+            <p class="text-slate-400">Управление строительством</p>
+        </div>
+        <a href="/projects" class="bg-orange-500 hover:bg-orange-600 px-8 py-4 rounded-2xl flex items-center gap-3">
+            <i class="fas fa-list"></i> Все проекты
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="bg-slate-900 rounded-3xl p-8">
+            <div class="text-slate-400">Всего проектов</div>
+            <div class="text-6xl font-bold mt-4">{{.Total}}</div>
+        </div>
+        <div class="bg-slate-900 rounded-3xl p-8">
+            <div class="text-slate-400">Активных</div>
+            <div class="text-6xl font-bold mt-4 text-orange-400">{{.Active}}</div>
+        </div>
+        <div class="bg-slate-900 rounded-3xl p-8">
+            <div class="text-slate-400">Бюджет</div>
+            <div class="text-6xl font-bold mt-4">{{.Budget}} ₽</div>
+        </div>
+        <div class="bg-slate-900 rounded-3xl p-8">
+            <div class="text-slate-400">Потрачено</div>
+            <div class="text-6xl font-bold mt-4 text-emerald-400">{{.Spent}} ₽</div>
+        </div>
+    </div>
+</div>
+{{end}}
