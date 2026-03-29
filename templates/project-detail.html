@@ -1,244 +1,137 @@
-{{define "title"}}{{.Project.Name}} — СтроМенеджер{{end}}
+{{define "title"}}{{.Project.Name}} — СтройМенеджер{{end}}
 
 {{define "content"}}
 <div class="max-w-7xl mx-auto p-8">
-    <a href="/projects" class="inline-flex items-center gap-2 text-orange-400 mb-8 hover:text-orange-300">
+
+    <!-- Назад -->
+    <a href="/projects" class="text-orange-400 hover:text-orange-300 mb-6 inline-block">
         ← Все проекты
     </a>
 
-    <div class="flex justify-between items-start">
-        <div>
-            <h1 class="text-4xl font-bold title">{{.Project.Name}}</h1>
-            <p class="text-slate-400 mt-2">{{.Project.Description}}</p>
-        </div>
-        <div class="text-right">
-            <div class="text-5xl font-bold text-orange-400">{{.Project.Progress}}%</div>
-            <div class="text-sm text-slate-400">общий прогресс</div>
-        </div>
-    </div>
+    <h1 class="text-4xl font-bold mb-10">{{.Project.Name}}</h1>
 
-    <!-- Основные показатели -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
-        <div class="bg-slate-900 rounded-3xl p-8">
-            <div class="text-slate-400">Бюджет</div>
-            <div class="text-4xl font-semibold mt-3">{{.Project.Budget}} ₽</div>
-        </div>
-        <div class="bg-slate-900 rounded-3xl p-8">
-            <div class="text-slate-400">Потрачено</div>
-            <div class="text-4xl font-semibold mt-3 text-emerald-400">{{.Project.Spent}} ₽</div>
-        </div>
-        <div class="bg-slate-900 rounded-3xl p-8">
-            <div class="text-slate-400">Сроки</div>
-            <div class="text-xl font-medium mt-3">{{.Project.StartDate}} — {{.Project.EndDate}}</div>
-        </div>
-    </div>
+    <!-- ОБЪЕКТЫ -->
+    {{range .Objects}}
+    <div class="mb-12 bg-slate-900 p-6 rounded-3xl">
 
-    <!-- Виды работ -->
-    <div class="mt-16">
         <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-semibold">Виды работ</h2>
-            <button onclick="showAddObjectModal()" 
-                    class="bg-orange-500 hover:bg-orange-600 px-6 py-3 rounded-2xl flex items-center gap-2 text-sm font-medium">
-                <i class="fas fa-plus"></i> Добавить 
-            </button>
+            <h2 class="text-2xl font-semibold">{{.Object.Name}}</h2>
+
+            <form action="/object/delete/{{.Object.ID}}" method="POST">
+                <button class="text-red-500 hover:text-red-400 text-sm">
+                    Удалить объект
+                </button>
+            </form>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {{range .Objects}}
-            <div class="bg-slate-900 rounded-3xl p-6">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="text-xl font-semibold">{{.Name}}</h3>
-                        <p class="text-slate-400">{{.Type}} • {{.Floors}} этажей</p>
-                        <p class="text-sm text-slate-500">{{.Material}}</p>
+        <!-- СТАДИИ -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            {{range .Stages}}
+            <div class="bg-slate-800 p-5 rounded-2xl">
+
+                <!-- Заголовок стадии -->
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold">
+                        {{if eq .Stage.Type "design"}}📐{{end}}
+                        {{if eq .Stage.Type "construction"}}🏗{{end}}
+                        {{.Stage.Name}}
+                    </h3>
+                </div>
+
+                <!-- СПИСОК РАБОТ -->
+                <div class="space-y-3 mb-4">
+                    {{range .Works}}
+                    <div class="flex justify-between items-center bg-slate-700 px-4 py-3 rounded-xl">
+
+                        <div>
+                            <div class="font-medium">{{.Name}}</div>
+                            <div class="text-xs text-slate-400">
+                                {{.StartDate}} → {{.EndDate}}
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <div class="text-sm text-orange-400">
+                                {{.Progress}}%
+                            </div>
+
+                            <form action="/work/delete/{{.ID}}" method="POST">
+                                <button class="text-red-400 hover:text-red-300 text-sm">
+                                    ✕
+                                </button>
+                            </form>
+                        </div>
+
                     </div>
-                    <button onclick="showEditObjectModal({{.ID}}, '{{.Name}}', '{{.Type}}', {{.Area}}, {{.Budget}}, {{.Floors}}, '{{.Material}}', '{{.Status}}')" 
-                            class="text-orange-400 hover:text-white">
-                        <i class="fas fa-edit"></i>
+                    {{end}}
+                </div>
+
+                <!-- ДОБАВИТЬ РАБОТУ -->
+                <form method="POST" action="/add-work" class="flex gap-2">
+                    <input type="hidden" name="stage_id" value="{{.Stage.ID}}">
+
+                    <input type="text" name="name" placeholder="Новая работа..."
+                        class="flex-1 bg-slate-700 rounded-xl px-4 py-2 text-sm">
+
+                    <button class="bg-orange-500 px-4 rounded-xl text-sm hover:bg-orange-600">
+                        +
                     </button>
-                </div>
-
-                <div class="mt-6 h-2.5 bg-slate-700 rounded-full overflow-hidden">
-                    <div class="h-full bg-orange-500 rounded-full" style="width: {{.Progress}}%"></div>
-                </div>
-
-                <div class="flex justify-between mt-4 text-sm">
-                    <span>{{.Budget}} ₽</span>
-                    <span class="text-emerald-400">{{.Spent}} ₽</span>
-                </div>
-
-                <form action="/object/delete/{{.ID}}" method="POST" class="mt-6">
-                    <button type="submit" onclick="return confirm('Удалить объект?')" 
-                            class="text-red-500 hover:text-red-400 text-sm">Удалить</button>
                 </form>
+
             </div>
             {{end}}
+
         </div>
     </div>
+    {{end}}
 
-    <!-- График работ -->
-    <div class="mt-16">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-semibold">График работ</h2>
-            <button onclick="showAddTaskModal()" 
-                    class="bg-orange-500 hover:bg-orange-600 px-6 py-3 rounded-2xl flex items-center gap-2 text-sm font-medium">
-                <i class="fas fa-plus"></i> Добавить работу
-            </button>
-        </div>
-
-        <div class="space-y-5">
-            {{range .Tasks}}
-            <div class="bg-slate-900 rounded-3xl p-6 flex items-center gap-6">
-                <div class="flex-1">
-                    <div class="font-medium text-lg">{{.Name}}</div>
-                    <div class="text-slate-400 text-sm mt-1">
-                        {{.AssignedTo}} • {{.StartDate}} — {{.EndDate}}
-                    </div>
-                    <div class="mt-4 h-2 bg-slate-700 rounded-full overflow-hidden">
-                        <div class="h-2 bg-blue-500 rounded-full" style="width: {{.Progress}}%"></div>
-                    </div>
-                </div>
-                <div class="text-right min-w-[140px]">
-                    <div class="text-3xl font-bold text-blue-400">{{.Progress}}%</div>
-                    <div class="text-xs text-slate-400">{{.Spent}} / {{.Estimated}} ₽</div>
-                </div>
-                <form action="/task/delete/{{.ID}}" method="POST">
-                    <button type="submit" onclick="return confirm('Удалить работу?')" 
-                            class="text-red-500 hover:text-red-400">✕</button>
-                </form>
-            </div>
-            {{end}}
-        </div>
+    <!-- ДОБАВИТЬ ОБЪЕКТ -->
+    <div class="mt-10">
+        <button onclick="showAddObjectModal()"
+            class="bg-orange-500 px-6 py-3 rounded-2xl hover:bg-orange-600">
+            + Добавить объект
+        </button>
     </div>
+
 </div>
 
-<!-- Модальные окна -->
-<script>
-    function showAddObjectModal() {
-        document.getElementById('addObjectModal').classList.remove('hidden');
-    }
+<!-- МОДАЛКА ОБЪЕКТА -->
+<div id="addObjectModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center">
+    <div class="bg-slate-900 p-8 rounded-3xl w-full max-w-md">
 
-    function hideAddObjectModal() {
-        document.getElementById('addObjectModal').classList.add('hidden');
-    }
+        <h2 class="text-xl mb-4">Новый объект</h2>
 
-    function showEditObjectModal(id, name, type, area, budget, floors, material, status) {
-        document.getElementById('edit_id').value = id;
-        document.getElementById('edit_name').value = name;
-        document.getElementById('edit_type').value = type;
-        document.getElementById('edit_area').value = area;
-        document.getElementById('edit_budget').value = budget;
-        document.getElementById('edit_floors').value = floors;
-        document.getElementById('edit_material').value = material;
-        if (status) {
-            document.getElementById('edit_status').value = status;
-        }
-        document.getElementById('editObjectModal').classList.remove('hidden');
-    }
-
-    function hideEditObjectModal() {
-        document.getElementById('editObjectModal').classList.add('hidden');
-    }
-
-    // Добавь функцию для задач, если нужно
-    function showAddTaskModal() {
-        alert("Добавление задач будет реализовано позже");
-    }
-</script>
-
-<!-- Модальное окно добавления объекта -->
-<div id="addObjectModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-    <div class="bg-slate-900 rounded-3xl p-8 w-full max-w-lg mx-4">
-        <h2 class="text-2xl font-semibold mb-6">Новый объект</h2>
-
-        <form method="POST" action="/add-object" class="space-y-4">
+        <form method="POST" action="/add-object">
             <input type="hidden" name="project_id" value="{{.Project.ID}}">
 
-            <input type="text" name="name" placeholder="Название объекта" required
-                class="w-full bg-slate-800 rounded-2xl px-5 py-4">
+            <input type="text" name="name" placeholder="Название"
+                class="w-full bg-slate-800 px-4 py-3 rounded-xl mb-4">
 
-            <input type="text" name="type" placeholder="Тип (дом, больница, склад)"
-                class="w-full bg-slate-800 rounded-2xl px-5 py-4">
-
-            <input type="number" step="0.1" name="area" placeholder="Площадь (м²)"
-                class="w-full bg-slate-800 rounded-2xl px-5 py-4">
-
-            <input type="number" step="0.01" name="budget" placeholder="Бюджет (₽)"
-                class="w-full bg-slate-800 rounded-2xl px-5 py-4">
-
-            <input type="number" name="floors" placeholder="Этажность"
-                class="w-full bg-slate-800 rounded-2xl px-5 py-4">
-
-            <input type="text" name="material" placeholder="Материал (бетон, кирпич)"
-                class="w-full bg-slate-800 rounded-2xl px-5 py-4">
-
-            <select name="status" class="w-full bg-slate-800 rounded-2xl px-5 py-4">
-                <option value="in_progress">В работе</option>
-                <option value="planned">Запланирован</option>
-                <option value="completed">Завершён</option>
-            </select>
-
-            <div class="flex gap-3 pt-4">
+            <div class="flex gap-3">
                 <button type="button" onclick="hideAddObjectModal()"
-                    class="w-1/2 bg-slate-700 py-4 rounded-2xl">
+                    class="w-1/2 bg-slate-700 py-3 rounded-xl">
                     Отмена
                 </button>
 
                 <button type="submit"
-                    class="w-1/2 bg-orange-500 hover:bg-orange-600 py-4 rounded-2xl">
+                    class="w-1/2 bg-orange-500 py-3 rounded-xl">
                     Добавить
                 </button>
             </div>
         </form>
+
     </div>
 </div>
 
-<!-- Модальное окно редактирования объекта -->
-<div id="editObjectModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-    <div class="bg-slate-900 rounded-3xl p-8 w-full max-w-lg mx-4">
-        <h2 class="text-2xl font-semibold mb-6">Редактировать объект</h2>
+<script>
+function showAddObjectModal() {
+    document.getElementById('addObjectModal').classList.remove('hidden')
+}
 
-        <form method="POST" action="/object/edit" class="space-y-4">
-            <input type="hidden" name="id" id="edit_id">
-            <input type="hidden" name="project_id" value="{{.Project.ID}}">
+function hideAddObjectModal() {
+    document.getElementById('addObjectModal').classList.add('hidden')
+}
+</script>
 
-            <input type="text" name="name" id="edit_name"
-                class="w-full bg-slate-800 rounded-2xl px-5 py-4">
-
-            <input type="text" name="type" id="edit_type"
-                class="w-full bg-slate-800 rounded-2xl px-5 py-4">
-
-            <input type="number" step="0.1" name="area" id="edit_area"
-                class="w-full bg-slate-800 rounded-2xl px-5 py-4">
-
-            <input type="number" step="0.01" name="budget" id="edit_budget"
-                class="w-full bg-slate-800 rounded-2xl px-5 py-4">
-
-            <input type="number" name="floors" id="edit_floors"
-                class="w-full bg-slate-800 rounded-2xl px-5 py-4">
-
-            <input type="text" name="material" id="edit_material"
-                class="w-full bg-slate-800 rounded-2xl px-5 py-4">
-
-            <select name="status" id="edit_status"
-                class="w-full bg-slate-800 rounded-2xl px-5 py-4">
-                <option value="in_progress">В работе</option>
-                <option value="planned">Запланирован</option>
-                <option value="completed">Завершён</option>
-            </select>
-
-            <div class="flex gap-3 pt-4">
-                <button type="button" onclick="hideEditObjectModal()"
-                    class="w-1/2 bg-slate-700 py-4 rounded-2xl">
-                    Отмена
-                </button>
-
-                <button type="submit"
-                    class="w-1/2 bg-orange-500 hover:bg-orange-600 py-4 rounded-2xl">
-                    Сохранить
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
 {{end}}

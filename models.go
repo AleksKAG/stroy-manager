@@ -13,28 +13,43 @@ type Project struct {
 }
 
 type Object struct {
-	ID          int
-	ProjectID   int
-	Name        string
-	Type        string
-	Area        float64
-	Budget      float64
-	Spent       float64
-	Progress    int
-	Floors      int     // новая характеристика
-	Material    string  // новая характеристика
-	Status      string
+	ID        int
+	ProjectID int
+	Name      string
+	Type      string
+	Area      float64
+	Floors    int
+	Material  string
+	Budget    float64
+	Spent     float64
+	Status    string
 }
 
-type Task struct {
-	ID         int
-	ProjectID  int
-	Name       string
-	StartDate  string
-	EndDate    string
+type Stage struct {
+	ID       int
+	ObjectID int
+	Type     string // design / construction
+	Name     string
+
+	Budget   float64
+	Spent    float64
+	Progress int
+}
+
+type Work struct {
+	ID      int
+	StageID int
+
+	Name string
+
+	StartDate string
+	EndDate   string
+
 	AssignedTo string
-	Estimated  float64
-	Spent      float64
-	Progress   int
-	Status     string
+
+	Estimated float64
+	Spent     float64
+
+	Progress int
+	Status   string
 }

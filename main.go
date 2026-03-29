@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	
 )
 
 func main() {
@@ -14,25 +13,23 @@ func main() {
 
 	// ==================== РОУТИНГ ====================
 
-	// Главная страница (дашборд)
+	// Главная страница
 	http.HandleFunc("/", dashboardHandler)
 
-	// Список всех проектов + создание нового
+	// Проекты
 	http.HandleFunc("/projects", projectsHandler)
-
-	// Детальная страница проекта
 	http.HandleFunc("/project/", projectDetailHandler)
 
-	// CRUD для объектов
+	// Объекты
 	http.HandleFunc("/add-object", addObjectHandler)
-	http.HandleFunc("/object/edit", editObjectHandler)
 	http.HandleFunc("/object/delete/", deleteObjectHandler)
 
-	// CRUD для задач
-	http.HandleFunc("/add-task", addTaskHandler)
-	http.HandleFunc("/task/delete/", deleteTaskHandler)
+	// 🔥 НОВОЕ — РАБОТЫ (вместо tasks)
+	http.HandleFunc("/add-work", addWorkHandler)
+	http.HandleFunc("/work/delete/", deleteWorkHandler)
 
-	fmt.Println("🚀 СтроМенеджер успешно запущен!")
-	fmt.Println("   Открой в браузере → http://localhost:8080")
+	fmt.Println("🚀 СтроМенеджер запущен!")
+	fmt.Println("👉 http://localhost:8080")
+
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
