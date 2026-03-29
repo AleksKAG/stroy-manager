@@ -94,10 +94,11 @@ func addObjectHandler(w http.ResponseWriter, r *http.Request) {
 	budget, _ := strconv.ParseFloat(r.FormValue("budget"), 64)
 	floors, _ := strconv.Atoi(r.FormValue("floors"))
 	material := r.FormValue("material")
+	status := r.FormValue("status")
 
 	_, _ = db.Exec(`INSERT INTO objects (project_id, name, type, area, budget, floors, material, status) 
-		VALUES (?, ?, ?, ?, ?, ?, ?, 'in_progress')`,
-		projectID, name, objType, area, budget, floors, material)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+		projectID, name, objType, area, budget, floors, material, status)
 
 	http.Redirect(w, r, fmt.Sprintf("/project/%d", projectID), http.StatusSeeOther)
 }

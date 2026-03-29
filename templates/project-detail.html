@@ -192,4 +192,53 @@
         </form>
     </div>
 </div>
+
+<!-- Модальное окно редактирования объекта -->
+<div id="editObjectModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+    <div class="bg-slate-900 rounded-3xl p-8 w-full max-w-lg mx-4">
+        <h2 class="text-2xl font-semibold mb-6">Редактировать объект</h2>
+
+        <form method="POST" action="/object/edit" class="space-y-4">
+            <input type="hidden" name="id" id="edit_id">
+            <input type="hidden" name="project_id" value="{{.Project.ID}}">
+
+            <input type="text" name="name" id="edit_name"
+                class="w-full bg-slate-800 rounded-2xl px-5 py-4">
+
+            <input type="text" name="type" id="edit_type"
+                class="w-full bg-slate-800 rounded-2xl px-5 py-4">
+
+            <input type="number" step="0.1" name="area" id="edit_area"
+                class="w-full bg-slate-800 rounded-2xl px-5 py-4">
+
+            <input type="number" step="0.01" name="budget" id="edit_budget"
+                class="w-full bg-slate-800 rounded-2xl px-5 py-4">
+
+            <input type="number" name="floors" id="edit_floors"
+                class="w-full bg-slate-800 rounded-2xl px-5 py-4">
+
+            <input type="text" name="material" id="edit_material"
+                class="w-full bg-slate-800 rounded-2xl px-5 py-4">
+
+            <select name="status" id="edit_status"
+                class="w-full bg-slate-800 rounded-2xl px-5 py-4">
+                <option value="in_progress">В работе</option>
+                <option value="planned">Запланирован</option>
+                <option value="completed">Завершён</option>
+            </select>
+
+            <div class="flex gap-3 pt-4">
+                <button type="button" onclick="hideEditObjectModal()"
+                    class="w-1/2 bg-slate-700 py-4 rounded-2xl">
+                    Отмена
+                </button>
+
+                <button type="submit"
+                    class="w-1/2 bg-orange-500 hover:bg-orange-600 py-4 rounded-2xl">
+                    Сохранить
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 {{end}}
