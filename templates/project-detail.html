@@ -85,43 +85,7 @@
         </div>
     </div>
     {{end}}
-<!-- ДОБАВИТЬ ОБЪЕКТ -->
-    <div class="mt-10">
-        <button onclick="showAddObjectModal()"
-            class="bg-orange-500 px-6 py-3 rounded-2xl hover:bg-orange-600">
-            + Добавить объект
-        </button>
-    </div>
 
-</div>
-
-<!-- МОДАЛКА ОБЪЕКТА -->
-<div id="addObjectModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center">
-    <div class="bg-slate-900 p-8 rounded-3xl w-full max-w-md">
-
-        <h2 class="text-xl mb-4">Новый объект</h2>
-
-        <form method="POST" action="/add-object">
-            <input type="hidden" name="project_id" value="{{.Project.ID}}">
-
-            <input type="text" name="name" placeholder="Название"
-                class="w-full bg-slate-800 px-4 py-3 rounded-xl mb-4">
-
-            <div class="flex gap-3">
-                <button type="button" onclick="hideAddObjectModal()"
-                    class="w-1/2 bg-slate-700 py-3 rounded-xl">
-                    Отмена
-                </button>
-
-                <button type="submit"
-                    class="w-1/2 bg-orange-500 py-3 rounded-xl">
-                    Добавить
-                </button>
-            </div>
-        </form>
-
-    </div>
-</div>
 
 <script>
 function showAddObjectModal() {
