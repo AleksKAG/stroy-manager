@@ -24,11 +24,10 @@ func main() {
 	http.HandleFunc("/add-object", addObjectHandler)
 	http.HandleFunc("/object/delete/", deleteObjectHandler)
 
-	// 🔥 НОВОЕ — РАБОТЫ (вместо tasks)
 	http.HandleFunc("/add-work", addWorkHandler)
 	http.HandleFunc("/work/delete/", deleteWorkHandler)
 
-	fmt.Println("🚀 СтроМенеджер запущен!")
+	fmt.Println("🚀 СтройМенеджер запущен!")
 	fmt.Println("👉 http://localhost:8080")
 
 	log.Fatal(http.ListenAndServe(":8080", nil))

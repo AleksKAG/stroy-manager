@@ -35,15 +35,54 @@
     {{end}}
 </div>
 
-<!-- Модальное окно создания проекта -->
-<div id="addProjectModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-    <div class="bg-slate-900 rounded-3xl p-8 w-full max-w-lg">
-        <h2 class="text-2xl font-semibold mb-6">Новый проект</h2>
-        <form method="POST" action="/projects">
-            <input type="text" name="name" placeholder="Название проекта" required class="w-full bg-slate-800 rounded-2xl px-5 py-4 mb-4">
-            <textarea name="description" placeholder="Описание" rows="3" class="w-full bg-slate-800 rounded-2xl px-5 py-4 mb-6"></textarea>
-            <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 py-4 rounded-2xl">Создать проект</button>
+
+    <!-- ДОБАВИТЬ ОБЪЕКТ -->
+    <div class="mt-10">
+        <button onclick="showAddObjectModal()"
+            class="bg-orange-500 px-6 py-3 rounded-2xl hover:bg-orange-600">
+            + Добавить объект
+        </button>
+    </div>
+
+</div>
+
+<!-- МОДАЛКА ОБЪЕКТА -->
+<div id="addObjectModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center">
+    <div class="bg-slate-900 p-8 rounded-3xl w-full max-w-md">
+
+        <h2 class="text-xl mb-4">Новый объект</h2>
+
+        <form method="POST" action="/add-object">
+            <input type="hidden" name="project_id" value="{{.Project.ID}}">
+
+            <input type="text" name="name" placeholder="Название"
+                class="w-full bg-slate-800 px-4 py-3 rounded-xl mb-4">
+
+            <div class="flex gap-3">
+                <button type="button" onclick="hideAddObjectModal()"
+                    class="w-1/2 bg-slate-700 py-3 rounded-xl">
+                    Отмена
+                </button>
+
+                <button type="submit"
+                    class="w-1/2 bg-orange-500 py-3 rounded-xl">
+                    Добавить
+                </button>
+            </div>
         </form>
+
     </div>
 </div>
+
+<script>
+function showAddObjectModal() {
+    document.getElementById('addObjectModal').classList.remove('hidden')
+}
+
+function hideAddObjectModal() {
+    document.getElementById('addObjectModal').classList.add('hidden')
+}
+</script>
+
+{{end}}
 {{end}}
