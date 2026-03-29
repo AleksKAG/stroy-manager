@@ -9,7 +9,14 @@
     </a>
 
     <h1 class="text-4xl font-bold mb-10">{{.Project.Name}}</h1>
+<div class="flex justify-between items-center mb-10">
+    <h1 class="text-4xl font-bold title">{{.Project.Name}}</h1>
 
+    <button onclick="document.getElementById('modal').classList.remove('hidden')"
+        class="bg-orange-500 px-6 py-3 rounded-2xl">
+        + Добавить объект
+    </button>
+</div>
     <!-- ОБЪЕКТЫ -->
     {{range .Objects}}
     <div class="mb-12 bg-slate-900 p-6 rounded-3xl">
